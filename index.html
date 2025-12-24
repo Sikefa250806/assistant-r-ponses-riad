@@ -186,7 +186,7 @@
         <div class="split">
           <textarea id="output" placeholder="La réponse apparaîtra ici…" style="min-height:420px"></textarea>
           <div class="footerNote">
-            <div><strong>Important :</strong> ceci est une mini-interface. Pour brancher l’IA, tu mets ton endpoint dans <span class="kbd">API_ENDPOINT</span> (voir script).</div>
+            <div><strong>Important :</strong> l’IA est appelée via Cloudflare Worker (la clé OpenAI ne doit jamais être dans cette page).</div>
           </div>
         </div>
       </section>
@@ -194,8 +194,8 @@
   </main>
 
   <script>
-    const API_ENDPOINT = "";
-    const API_KEY = "";
+    // ✅ Mets ici l’URL de TON Worker Cloudflare
+    const API_ENDPOINT = "https://red-frog-ce54.mourad-afekhssi.workers.dev";
 
     const $ = (id) => document.getElementById(id);
 
@@ -231,6 +231,7 @@
       }
     }
 
+    // Si API_ENDPOINT est renseigné -> mode IA
     setStatus(API_ENDPOINT ? "live" : "demo");
 
     const WELCOME_FR = (name) => (
@@ -301,10 +302,70 @@ Nous revenons vers vous dès réception.`;
 
       output.value = `${welcome}\n\n${body}${closingSignature()}`;
       btnCopy.disabled = false;
-      meta.textContent = `${new Date().toLocaleString("fr-FR")} • Langue: ${lang.toUpperCase()} • Canal: ${channel.value}`;
+      meta.textContent = `${new Date().toLocaleString("fr-FR")} • Langue: ${lang.toUpperCase()} • Canal: ${channel.value} • (démo)`;
     }
 
-    btnGenerate.addEventListener("click", buildDemoResponse);
+    async function generateAIResponse(){
+      const msg = clientMsg.value.trim();
+      if(!msg){
+        output.value = "Colle d’abord le message du client 🙂";
+        return;
+      }
+
+      if(!API_ENDPOINT){
+        buildDemoResponse();
+        return;
+      }
+
+      btnGenerate.disabled = true;
+      output.value = "⏳ Génération en cours…";
+
+      const lang = (language.value === "auto") ? inferLangFromText(msg) : language.value;
+
+      const payload = {
+        language: lang,
+        channel: channel.value,
+        tone: tone.value,
+        length: length.value,
+        internal_notes: internalNotes.value || "",
+        client_message: msg
+      };
+
+      try{
+        const res = await fetch(API_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        // Si Cloudflare / OpenAI renvoie une erreur, on affiche le détail
+        const text = await res.text();
+        let data = null;
+        try { data = JSON.parse(text); } catch {}
+
+        if(!res.ok){
+          const errMsg = (data && (data.error || data.message)) ? (data.error || data.message) : text;
+          output.value = `❌ Erreur API (${res.status})\n${errMsg}`;
+          setStatus("danger");
+          return;
+        }
+
+        const reply = data && data.reply ? data.reply : "";
+        output.value = reply || "Aucune réponse générée.";
+        btnCopy.disabled = false;
+
+        setStatus("live");
+        meta.textContent = `${new Date().toLocaleString("fr-FR")} • Langue: ${lang.toUpperCase()} • Canal: ${channel.value} • (IA)`;
+      } catch(e){
+        output.value = "❌ Erreur lors de l’appel à l’IA (ouvre F12 → Console pour le détail).";
+        console.error(e);
+        setStatus("danger");
+      } finally{
+        btnGenerate.disabled = false;
+      }
+    }
+
+    btnGenerate.addEventListener("click", generateAIResponse);
 
     btnCopy.addEventListener("click", async () => {
       await navigator.clipboard.writeText(output.value);
@@ -318,6 +379,7 @@ Nous revenons vers vous dès réception.`;
       output.value = "";
       btnCopy.disabled = true;
       meta.textContent = "";
+      // On ne change pas le statut : il dépend de API_ENDPOINT
     });
 
     document.addEventListener("keydown", (e) => {
