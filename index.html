@@ -6,7 +6,6 @@
   <title>Assistant Réponses — Riad El Maati</title>
   <style>
     :root{
-      /* PALETTE ORIENTALE CHAUDE */
       --bg:#1a1208;
       --card:#24180c;
       --muted:#c9b8a3;
@@ -19,7 +18,7 @@
       --shadow: 0 14px 34px rgba(0,0,0,.45);
       --radius:16px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
     *{box-sizing:border-box}
     body{
@@ -34,12 +33,10 @@
       padding:28px 18px 10px;
       max-width:1100px; margin:0 auto;
     }
-    h1{margin:0; font-size:20px; letter-spacing:.2px}
+    h1{margin:0; font-size:20px}
     .sub{margin:8px 0 0; color:var(--muted); font-size:13px}
     main{max-width:1100px; margin:0 auto; padding:18px}
-    .grid{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:14px;
-    }
+    .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px}
     @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
     .card{
       background:linear-gradient(180deg, rgba(255,200,150,.06), rgba(255,200,150,.02));
@@ -55,7 +52,7 @@
       color:var(--text); border-radius:12px; padding:10px 12px;
       outline:none; font-size:13px;
     }
-    textarea{min-height:160px; resize:vertical; line-height:1.45}
+    textarea{min-height:160px; resize:vertical}
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width: 520px){ .row{grid-template-columns:1fr} }
     .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
@@ -74,320 +71,120 @@
       border-color:rgba(212,162,76,.65);
       color:#1a1208;
     }
-    button:hover{filter:brightness(1.08)}
-    button:disabled{opacity:.55; cursor:not-allowed}
-    .hint{font-size:12px; color:var(--muted); margin-top:10px; line-height:1.35}
+    button:disabled{opacity:.55}
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       font-size:12px; color:var(--muted);
       padding:8px 10px; border-radius:999px;
-      border:1px solid var(--border); background:rgba(255,200,150,.05);
+      border:1px solid var(--border);
     }
     .statusDot{width:9px; height:9px; border-radius:50%}
     .ok{background:var(--ok)} .warn{background:var(--warn)} .danger{background:var(--danger)}
-    .outHeader{display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .outHeader{display:flex; justify-content:space-between; align-items:center}
     .mono{font-family:var(--mono)}
     .small{font-size:12px; color:var(--muted)}
-    .split{
-      display:grid; grid-template-columns:1fr; gap:10px;
-    }
-    .footerNote{margin-top:16px; font-size:12px; color:var(--muted)}
-    .kbd{
-      font-family:var(--mono); font-size:11px; padding:2px 6px; border:1px solid var(--border);
-      background:rgba(255,200,150,.08); border-radius:8px; color:#ffe3b3;
-    }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Assistant Réponses — Riad El Maati</h1>
-    <p class="sub">Colle le message client, ajoute des précisions si besoin, puis génère une réponse pro & chaleureuse (multilingue).</p>
-  </header>
+<header>
+  <h1>Assistant Réponses — Riad El Maati</h1>
+  <p class="sub">Colle le message client puis génère une réponse professionnelle et chaleureuse.</p>
+</header>
 
-  <main>
-    <div class="grid">
-      <!-- INPUTS -->
-      <section class="card">
-        <h2>Entrées</h2>
+<main>
+<div class="grid">
 
-        <label for="clientMsg">Message client (copier/coller)</label>
-        <textarea id="clientMsg" placeholder="Colle ici le message reçu (Booking, Airbnb, WhatsApp, email, etc.)"></textarea>
+<section class="card">
+<h2>Entrées</h2>
 
-        <label for="internalNotes">Précisions (facultatif)</label>
-        <textarea id="internalNotes" placeholder="Ex: Check-in 15h / arrivée tardive ok / transfert 25€ / petit-déj 8h-11h / parking à 2 min..."></textarea>
+<label>Message client</label>
+<textarea id="clientMsg"></textarea>
 
-        <div class="row">
-          <div>
-            <label for="language">Langue de réponse</label>
-            <select id="language">
-              <option value="auto" selected>Auto (détecter la langue du client)</option>
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
-              <option value="ar">العربية</option>
-              <option value="it">Italiano</option>
-              <option value="de">Deutsch</option>
-              <option value="nl">Nederlands</option>
-            </select>
-          </div>
-          <div>
-            <label for="channel">Canal</label>
-            <select id="channel">
-              <option value="booking" selected>Booking / OTA</option>
-              <option value="airbnb">Airbnb</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="email">Email</option>
-              <option value="instagram">Instagram</option>
-            </select>
-          </div>
-        </div>
+<label>Précisions</label>
+<textarea id="internalNotes"></textarea>
 
-        <div class="row">
-          <div>
-            <label for="tone">Ton</label>
-            <select id="tone">
-              <option value="standard" selected>Standard (pro & chaleureux)</option>
-              <option value="warm">Très chaleureux</option>
-              <option value="formal">Plus formel</option>
-            </select>
-          </div>
-          <div>
-            <label for="length">Longueur</label>
-            <select id="length">
-              <option value="short">Courte</option>
-              <option value="standard" selected>Standard</option>
-              <option value="detailed">Détaillée</option>
-            </select>
-          </div>
-        </div>
+<div class="row">
+<select id="language">
+<option value="auto" selected>Auto</option>
+<option value="fr">Français</option>
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="ar">العربية</option>
+<option value="it">Italiano</option>
+<option value="de">Deutsch</option>
+<option value="nl">Nederlands</option>
+</select>
 
-        <label for="riadName">Nom du riad (modifiable)</label>
-        <input id="riadName" type="text" value="Riad El Maati" />
+<select id="channel">
+<option value="booking" selected>Booking</option>
+<option value="airbnb">Airbnb</option>
+<option value="whatsapp">WhatsApp</option>
+<option value="email">Email</option>
+<option value="instagram">Instagram</option>
+</select>
+</div>
 
-        <div class="btns">
-          <button class="primary" id="btnGenerate">Générer la réponse</button>
-          <button id="btnCopy" disabled>Copier</button>
-          <button id="btnClear">Effacer</button>
-          <span class="pill" id="statusPill"><span class="statusDot warn"></span><span id="statusText">Mode démo (sans IA)</span></span>
-        </div>
+<input id="riadName" type="text" value="Riad El Maati"/>
 
-        <p class="hint">
-          Astuce : <span class="kbd">Ctrl</span> + <span class="kbd">Entrée</span> pour générer.
-          <br/>Le bloc de bienvenue est automatiquement inclus en ouverture.
-        </p>
-      </section>
+<div class="btns">
+<button class="primary" id="btnGenerate">Générer</button>
+<button id="btnCopy" disabled>Copier</button>
+<button id="btnClear">Effacer</button>
+<span class="pill" id="statusPill">
+<span class="statusDot warn"></span>
+<span id="statusText">Mode IA</span>
+</span>
+</div>
+</section>
 
-      <!-- OUTPUT -->
-      <section class="card">
-        <div class="outHeader">
-          <h2>Réponse générée</h2>
-          <div class="small mono" id="meta"></div>
-        </div>
-        <div class="split">
-          <textarea id="output" placeholder="La réponse apparaîtra ici…" style="min-height:420px"></textarea>
-          <div class="footerNote">
-            <div><strong>Important :</strong> l’IA est appelée via Cloudflare Worker (la clé OpenAI ne doit jamais être dans cette page).</div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+<section class="card">
+<h2>Réponse générée</h2>
+<textarea id="output" style="min-height:420px"></textarea>
+</section>
 
-  <script>
-    // ✅ Mets ici l’URL de TON Worker Cloudflare
-    const API_ENDPOINT = "https://red-frog-ce54.mourad-afekhssi.workers.dev";
+</div>
+</main>
 
-    const $ = (id) => document.getElementById(id);
+<script>
+const API_ENDPOINT = "https://red-frog-ce54.mourad-afekhssi.workers.dev";
+const $ = id => document.getElementById(id);
 
-    const clientMsg = $("clientMsg");
-    const internalNotes = $("internalNotes");
-    const language = $("language");
-    const channel = $("channel");
-    const tone = $("tone");
-    const length = $("length");
-    const riadName = $("riadName");
-    const output = $("output");
+function closingSignature(){
+  return `\n\nBien cordialement,\n${$("riadName").value}`;
+}
 
-    const btnGenerate = $("btnGenerate");
-    const btnCopy = $("btnCopy");
-    const btnClear = $("btnClear");
+$("btnGenerate").onclick = async () => {
+  const msg = $("clientMsg").value.trim();
+  if(!msg){ $("output").value="Colle un message client."; return; }
 
-    const statusPill = $("statusPill");
-    const statusText = $("statusText");
-    const meta = $("meta");
+  const res = await fetch(API_ENDPOINT,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      client_message:msg,
+      internal_notes:$("internalNotes").value,
+      language:$("language").value,
+      channel:$("channel").value
+    })
+  });
 
-    function setStatus(mode){
-      const dot = statusPill.querySelector(".statusDot");
-      dot.classList.remove("ok","warn","danger");
-      if(mode === "demo"){
-        dot.classList.add("warn");
-        statusText.textContent = "Mode démo (sans IA)";
-      }else if(mode === "live"){
-        dot.classList.add("ok");
-        statusText.textContent = "Mode IA (endpoint connecté)";
-      }else{
-        dot.classList.add("danger");
-        statusText.textContent = "Erreur";
-      }
-    }
+  const data = await res.json();
+  $("output").value = (data.reply || "") + closingSignature();
+  $("btnCopy").disabled=false;
+};
 
-    // Si API_ENDPOINT est renseigné -> mode IA
-    setStatus(API_ENDPOINT ? "live" : "demo");
+$("btnCopy").onclick = async ()=>{
+  await navigator.clipboard.writeText($("output").value);
+};
 
-    const WELCOME_FR = (name) => (
-`Nous vous remercions pour votre message.
-C’est avec grand plaisir que nous vous souhaitons par avance la bienvenue au ${name}.
-Toute l’équipe se réjouit de pouvoir vous accueillir prochainement et reste à votre entière disposition pour toute information complémentaire.`
-    );
+$("btnClear").onclick = ()=>{
+  $("clientMsg").value="";
+  $("internalNotes").value="";
+  $("output").value="";
+  $("btnCopy").disabled=true;
+};
+</script>
 
-    function welcomeText(lang, name){
-      switch(lang){
-        case "en":
-          return `Thank you for your message.
-We are delighted to welcome you in advance to ${name}.
-Our entire team looks forward to welcoming you and remains at your disposal for any further information.`;
-        case "es":
-          return `Muchas gracias por su mensaje.
-Será un placer darle la bienvenida próximamente a ${name}.
-Todo nuestro equipo se alegra de poder recibirle y queda a su disposición para cualquier información adicional.`;
-        case "ar":
-          return `شكرًا جزيلًا على رسالتكم.
-يسعدنا أن نرحب بكم مسبقًا في ${name}.
-يتطلع فريقنا بأكمله إلى استقبالكم ويبقى رهن إشارتكم لأي معلومات إضافية.`;
-        case "it":
-          return `La ringraziamo per il suo messaggio.
-Saremo lieti di darle il benvenuto in anticipo presso ${name}.
-Tutto il nostro team è felice di accoglierla e resta a sua disposizione per qualsiasi ulteriore informazione.`;
-        case "de":
-          return `Vielen Dank für Ihre Nachricht.
-Wir freuen uns, Sie schon im Voraus im ${name} begrüßen zu dürfen.
-Unser gesamtes Team freut sich auf Ihren Besuch und steht Ihnen für weitere Informationen gerne zur Verfügung.`;
-        case "nl":
-          return `Hartelijk dank voor uw bericht.
-Wij heten u alvast van harte welkom bij ${name}.
-Ons hele team kijkt ernaar uit u te mogen ontvangen en staat tot uw beschikking voor verdere informatie.`;
-        default:
-          return WELCOME_FR(name);
-      }
-    }
-
-    function inferLangFromText(text){
-      const t = (text || "").toLowerCase();
-      if(/[ء-ي]/.test(t)) return "ar";
-      if(t.includes("hello") || t.includes("thanks") || t.includes("check-in")) return "en";
-      if(t.includes("hola") || t.includes("gracias")) return "es";
-      if(t.includes("buongiorno") || t.includes("grazie")) return "it";
-      if(t.includes("hallo") || t.includes("danke")) return "de";
-      if(t.includes("dank u")) return "nl";
-      return "fr";
-    }
-
-    function closingSignature(){
-      return `\n\nBien cordialement,\n${riadName.value.trim() || "Riad El Maati"}`;
-    }
-
-    function buildDemoResponse(){
-      const msg = clientMsg.value.trim();
-      if(!msg){
-        output.value = "Colle d’abord le message du client 🙂";
-        return;
-      }
-      const lang = (language.value === "auto") ? inferLangFromText(msg) : language.value;
-      const name = riadName.value.trim() || "Riad El Maati";
-      const welcome = welcomeText(lang, name);
-
-      let body =
-`Afin de vous répondre au mieux, pourriez-vous nous préciser vos dates et le nombre de personnes ?
-Nous revenons vers vous dès réception.`;
-
-      output.value = `${welcome}\n\n${body}${closingSignature()}`;
-      btnCopy.disabled = false;
-      meta.textContent = `${new Date().toLocaleString("fr-FR")} • Langue: ${lang.toUpperCase()} • Canal: ${channel.value} • (démo)`;
-    }
-
-    async function generateAIResponse(){
-      const msg = clientMsg.value.trim();
-      if(!msg){
-        output.value = "Colle d’abord le message du client 🙂";
-        return;
-      }
-
-      if(!API_ENDPOINT){
-        buildDemoResponse();
-        return;
-      }
-
-      btnGenerate.disabled = true;
-      output.value = "⏳ Génération en cours…";
-
-      const lang = (language.value === "auto") ? inferLangFromText(msg) : language.value;
-
-      const payload = {
-        language: lang,
-        channel: channel.value,
-        tone: tone.value,
-        length: length.value,
-        internal_notes: internalNotes.value || "",
-        client_message: msg
-      };
-
-      try{
-        const res = await fetch(API_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        // Si Cloudflare / OpenAI renvoie une erreur, on affiche le détail
-        const text = await res.text();
-        let data = null;
-        try { data = JSON.parse(text); } catch {}
-
-        if(!res.ok){
-          const errMsg = (data && (data.error || data.message)) ? (data.error || data.message) : text;
-          output.value = `❌ Erreur API (${res.status})\n${errMsg}`;
-          setStatus("danger");
-          return;
-        }
-
-        const reply = data && data.reply ? data.reply : "";
-        output.value = reply || "Aucune réponse générée.";
-        btnCopy.disabled = false;
-
-        setStatus("live");
-        meta.textContent = `${new Date().toLocaleString("fr-FR")} • Langue: ${lang.toUpperCase()} • Canal: ${channel.value} • (IA)`;
-      } catch(e){
-        output.value = "❌ Erreur lors de l’appel à l’IA (ouvre F12 → Console pour le détail).";
-        console.error(e);
-        setStatus("danger");
-      } finally{
-        btnGenerate.disabled = false;
-      }
-    }
-
-    btnGenerate.addEventListener("click", generateAIResponse);
-
-    btnCopy.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(output.value);
-      btnCopy.textContent = "Copié ✅";
-      setTimeout(()=> btnCopy.textContent = "Copier", 900);
-    });
-
-    btnClear.addEventListener("click", () => {
-      clientMsg.value = "";
-      internalNotes.value = "";
-      output.value = "";
-      btnCopy.disabled = true;
-      meta.textContent = "";
-      // On ne change pas le statut : il dépend de API_ENDPOINT
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if((e.ctrlKey || e.metaKey) && e.key === "Enter"){
-        e.preventDefault();
-        btnGenerate.click();
-      }
-    });
-  </script>
 </body>
 </html>
