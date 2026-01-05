@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Assistant Réponses — Riad El Maati</title>
+
   <style>
     :root{
       --bg:#1a1208;
@@ -22,7 +23,8 @@
     }
     *{box-sizing:border-box}
     body{
-      margin:0; font-family:var(--sans);
+      margin:0;
+      font-family:var(--sans);
       background:
         radial-gradient(1200px 600px at 20% -10%, rgba(212,162,76,.25), transparent 55%),
         radial-gradient(900px 500px at 80% 10%, rgba(230,181,102,.18), transparent 55%),
@@ -31,13 +33,14 @@
     }
     header{
       padding:28px 18px 10px;
-      max-width:1100px; margin:0 auto;
+      max-width:1100px;
+      margin:0 auto;
     }
-    h1{margin:0; font-size:20px}
-    .sub{margin:8px 0 0; color:var(--muted); font-size:13px}
-    main{max-width:1100px; margin:0 auto; padding:18px}
-    .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    h1{margin:0;font-size:20px}
+    .sub{margin:8px 0 0;color:var(--muted);font-size:13px}
+    main{max-width:1100px;margin:0 auto;padding:18px}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
     .card{
       background:linear-gradient(180deg, rgba(255,200,150,.06), rgba(255,200,150,.02));
       border:1px solid var(--border);
@@ -45,17 +48,22 @@
       box-shadow:var(--shadow);
       padding:14px;
     }
-    .card h2{margin:0 0 10px; font-size:14px; color:#ffe3b3}
-    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
+    .card h2{margin:0 0 10px;font-size:14px;color:#ffe3b3}
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     textarea, select, input[type="text"]{
-      width:100%; border:1px solid var(--border); background:#2c1e11;
-      color:var(--text); border-radius:12px; padding:10px 12px;
-      outline:none; font-size:13px;
+      width:100%;
+      border:1px solid var(--border);
+      background:#2c1e11;
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+      font-size:13px;
     }
-    textarea{min-height:160px; resize:vertical}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    @media (max-width: 520px){ .row{grid-template-columns:1fr} }
-    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    textarea{min-height:160px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:520px){.row{grid-template-columns:1fr}}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     button{
       border:1px solid var(--border);
       background:rgba(255,200,150,.06);
@@ -73,20 +81,24 @@
     }
     button:disabled{opacity:.55}
     .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      font-size:12px; color:var(--muted);
-      padding:8px 10px; border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:999px;
       border:1px solid var(--border);
     }
-    .statusDot{width:9px; height:9px; border-radius:50%}
-    .ok{background:var(--ok)} .warn{background:var(--warn)} .danger{background:var(--danger)}
-    .outHeader{display:flex; justify-content:space-between; align-items:center}
-    .mono{font-family:var(--mono)}
-    .small{font-size:12px; color:var(--muted)}
+    .statusDot{width:9px;height:9px;border-radius:50%}
+    .ok{background:var(--ok)}
+    .warn{background:var(--warn)}
+    .danger{background:var(--danger)}
   </style>
 </head>
 
 <body>
+
 <header>
   <h1>Assistant Réponses — Riad El Maati</h1>
   <p class="sub">Colle le message client puis génère une réponse professionnelle et chaleureuse.</p>
@@ -96,51 +108,51 @@
 <div class="grid">
 
 <section class="card">
-<h2>Entrées</h2>
+  <h2>Entrées</h2>
 
-<label>Message client</label>
-<textarea id="clientMsg"></textarea>
+  <label>Message client</label>
+  <textarea id="clientMsg"></textarea>
 
-<label>Précisions</label>
-<textarea id="internalNotes"></textarea>
+  <label>Précisions</label>
+  <textarea id="internalNotes"></textarea>
 
-<div class="row">
-<select id="language">
-<option value="auto" selected>Auto</option>
-<option value="fr">Français</option>
-<option value="en">English</option>
-<option value="es">Español</option>
-<option value="ar">العربية</option>
-<option value="it">Italiano</option>
-<option value="de">Deutsch</option>
-<option value="nl">Nederlands</option>
-</select>
+  <div class="row">
+    <select id="language">
+      <option value="auto" selected>Auto</option>
+      <option value="fr">Français</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="ar">العربية</option>
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+      <option value="nl">Nederlands</option>
+    </select>
 
-<select id="channel">
-<option value="booking" selected>Booking</option>
-<option value="airbnb">Airbnb</option>
-<option value="whatsapp">WhatsApp</option>
-<option value="email">Email</option>
-<option value="instagram">Instagram</option>
-</select>
-</div>
+    <select id="channel">
+      <option value="booking" selected>Booking</option>
+      <option value="airbnb">Airbnb</option>
+      <option value="whatsapp">WhatsApp</option>
+      <option value="email">Email</option>
+      <option value="instagram">Instagram</option>
+    </select>
+  </div>
 
-<input id="riadName" type="text" value="Riad El Maati"/>
+  <input id="riadName" type="text" value="Riad El Maati"/>
 
-<div class="btns">
-<button class="primary" id="btnGenerate">Générer</button>
-<button id="btnCopy" disabled>Copier</button>
-<button id="btnClear">Effacer</button>
-<span class="pill" id="statusPill">
-<span class="statusDot warn"></span>
-<span id="statusText">Mode IA</span>
-</span>
-</div>
+  <div class="btns">
+    <button class="primary" id="btnGenerate">Générer</button>
+    <button id="btnCopy" disabled>Copier</button>
+    <button id="btnClear">Effacer</button>
+    <span class="pill">
+      <span class="statusDot warn"></span>
+      Mode IA
+    </span>
+  </div>
 </section>
 
 <section class="card">
-<h2>Réponse générée</h2>
-<textarea id="output" style="min-height:420px"></textarea>
+  <h2>Réponse générée</h2>
+  <textarea id="output" style="min-height:420px"></textarea>
 </section>
 
 </div>
@@ -156,33 +168,45 @@ function closingSignature(){
 
 $("btnGenerate").onclick = async () => {
   const msg = $("clientMsg").value.trim();
-  if(!msg){ $("output").value="Colle un message client."; return; }
+  if(!msg){
+    $("output").value = "Colle un message client.";
+    return;
+  }
 
   const res = await fetch(API_ENDPOINT,{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
     body:JSON.stringify({
-      client_message:msg,
-      internal_notes:$("internalNotes").value,
-      language:$("language").value,
-      channel:$("channel").value
+      client_message: msg,
+      internal_notes: $("internalNotes").value,
+      language: $("language").value,
+      channel: $("channel").value
     })
   });
 
   const data = await res.json();
-  $("output").value = (data.reply || "") + closingSignature();
-  $("btnCopy").disabled=false;
+
+  const unwanted = `Nous vous remercions pour votre message.
+C’est avec grand plaisir que nous vous souhaitons par avance la bienvenue au Riad El Maati.
+Toute l’équipe se réjouit de pouvoir vous accueillir prochainement et reste à votre entière disposition pour toute information complémentaire`;
+
+  const cleanedReply = (data.reply || "")
+    .replace(unwanted, "")
+    .trim();
+
+  $("output").value = cleanedReply + closingSignature();
+  $("btnCopy").disabled = false;
 };
 
-$("btnCopy").onclick = async ()=>{
+$("btnCopy").onclick = async () => {
   await navigator.clipboard.writeText($("output").value);
 };
 
-$("btnClear").onclick = ()=>{
-  $("clientMsg").value="";
-  $("internalNotes").value="";
-  $("output").value="";
-  $("btnCopy").disabled=true;
+$("btnClear").onclick = () => {
+  $("clientMsg").value = "";
+  $("internalNotes").value = "";
+  $("output").value = "";
+  $("btnCopy").disabled = true;
 };
 </script>
 
