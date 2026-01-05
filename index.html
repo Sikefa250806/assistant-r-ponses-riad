@@ -80,20 +80,6 @@
       color:#1a1208;
     }
     button:disabled{opacity:.55}
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-size:12px;
-      color:var(--muted);
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-    }
-    .statusDot{width:9px;height:9px;border-radius:50%}
-    .ok{background:var(--ok)}
-    .warn{background:var(--warn)}
-    .danger{background:var(--danger)}
   </style>
 </head>
 
@@ -143,10 +129,6 @@
     <button class="primary" id="btnGenerate">Générer</button>
     <button id="btnCopy" disabled>Copier</button>
     <button id="btnClear">Effacer</button>
-    <span class="pill">
-      <span class="statusDot warn"></span>
-      Mode IA
-    </span>
   </div>
 </section>
 
@@ -164,6 +146,13 @@ const $ = id => document.getElementById(id);
 
 function closingSignature(){
   return `\n\nBien cordialement,\n${$("riadName").value}`;
+}
+
+function cleanWelcome(text){
+  return text
+    // Supprime tout message de bienvenue automatique
+    .replace(/nous vous remercions pour votre message[\s\S]*?information complémentaire\.?/i, "")
+    .trim();
 }
 
 $("btnGenerate").onclick = async () => {
@@ -186,13 +175,7 @@ $("btnGenerate").onclick = async () => {
 
   const data = await res.json();
 
-  const unwanted = `Nous vous remercions pour votre message.
-C’est avec grand plaisir que nous vous souhaitons par avance la bienvenue au Riad El Maati.
-Toute l’équipe se réjouit de pouvoir vous accueillir prochainement et reste à votre entière disposition pour toute information complémentaire`;
-
-  const cleanedReply = (data.reply || "")
-    .replace(unwanted, "")
-    .trim();
+  const cleanedReply = cleanWelcome(data.reply || "");
 
   $("output").value = cleanedReply + closingSignature();
   $("btnCopy").disabled = false;
